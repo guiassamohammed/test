@@ -13,5 +13,5 @@ stages:
     steps:
     - script: echo "Running tests"
   pool:
-    name: Pool2
+    name: ubuntu-latest
 
