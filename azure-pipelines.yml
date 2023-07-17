@@ -15,6 +15,3 @@ stages:
   pool:
     name: Pool2
 
-parallel:
-  - Build
-  - Test
