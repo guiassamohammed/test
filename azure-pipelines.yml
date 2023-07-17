@@ -8,6 +8,7 @@ stages:
      vmImage: ubuntu-latest
 
 - stage: Test
+  dependsOn: Build
   jobs:
   - job: Test
     steps:
