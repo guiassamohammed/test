@@ -1,18 +1,13 @@
-stages:
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - script: echo "Building the project"
-  pool:
-     vmImage: ubuntu-latest
+jobs:
+- job: Build
+  steps:
+  - script: echo "Building the project"
 
-- stage: Test
-  dependsOn: Build
-  jobs:
-  - job: Test
-    steps:
-    - script: echo "Running tests"
-  pool:
-     vmImage: ubuntu-latest
+- job: Test
+  steps:
+  - script: echo "Running tests"
+  
 
+- job: SliceItFourWays
+  strategy:
+    parallel: 4
