@@ -1,0 +1,14 @@
+jobs:
+- job: Build
+  steps:
+  - script: echo "Building the project"
+
+- job: Test
+  steps:
+  - script: echo "Running tests"
+  
+strategy:
+  matrix:
+    parallel:
+      - job: Build
+      - job: Test
