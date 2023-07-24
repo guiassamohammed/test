@@ -1,3 +1,5 @@
+pool:
+  name: windows-latest
 jobs:
 - job: Test
   strategy:
