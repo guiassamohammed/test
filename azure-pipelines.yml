@@ -1,5 +1,5 @@
 pool:
-  name: windows-latest
+ demands:   agent.os -equals Windows_NT
 jobs:
 - job: Test
   strategy:
