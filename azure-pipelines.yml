@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage:  'myvmsspool'
+  name:  'myvmsspool'
 jobs:
 - job: Test1
   steps: 
