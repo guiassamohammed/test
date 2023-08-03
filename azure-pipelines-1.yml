@@ -1,6 +1,6 @@
 
 pool:
-  vmImage:  'windows-latest'
+  name:  'myvmsspool'
 jobs:
 - job: Test3
   steps: 
