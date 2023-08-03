@@ -1,0 +1,15 @@
+trigger: 
+- none
+
+pool:
+  vmImage:  'windows-latest'
+jobs:
+- job: Test
+  steps: 
+  - pwsh: | 
+      Start-Sleep -s  500
+
+- job: Test2
+  steps: 
+  - pwsh: | 
+      Start-Sleep -s  500
