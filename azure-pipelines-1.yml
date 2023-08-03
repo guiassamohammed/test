@@ -4,11 +4,24 @@ pool:
 jobs:
 - job: Test3
   steps:
-  - script:  echo hello
-
-
-  
+  - script:  echo hello , $HOSTNAME
 
 - job: Test4
   steps: 
-  - script:  echo hello
+  - script:  echo hello , $HOSTNAME
+
+- job: Test5
+  steps:
+  - script:  echo hello , $HOSTNAME
+
+- job: Test6
+  steps: 
+  - script:  echo hello , $HOSTNAME
+
+- job: Test7
+  steps:
+  - script:  echo hello , $HOSTNAME
+
+- job: Test8
+  steps: 
+  - script:  echo hello , $HOSTNAME
