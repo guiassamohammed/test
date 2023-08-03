@@ -2,9 +2,9 @@ trigger:
 - main
 
 pool:
-  vmImage:  'windows-latest'
+  vmImage:  'myvmsspool'
 jobs:
-- job: Test
+- job: Test1
   steps: 
   - pwsh: | 
       Start-Sleep -s  500
