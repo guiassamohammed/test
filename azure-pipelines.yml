@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage:  'windowslatest'
+  vmImage:  'windows-latest'
 jobs:
 - job: Test
   steps: 
