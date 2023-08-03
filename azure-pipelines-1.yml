@@ -2,12 +2,12 @@
 pool:
   vmImage:  'windows-latest'
 jobs:
-- job: Test
+- job: Test3
   steps: 
   - pwsh: | 
       Start-Sleep -s  500
 
-- job: Test2
+- job: Test4
   steps: 
   - pwsh: | 
       Start-Sleep -s  500
