@@ -3,10 +3,12 @@ pool:
   name:  'myvmsspool'
 jobs:
 - job: Test3
-  steps:  echo hello, $HOSTNAME
+  steps:
+  - script:  echo hello
+
 
   
 
 - job: Test4
   steps: 
-  - script:  echo hello, $HOSTNAME
+  - script:  echo hello
