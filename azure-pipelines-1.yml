@@ -1,27 +1,23 @@
-trigger:
-  -  main
+name: Azure DevOps Pipelines - Matrix Strategy
 
-
+trigger: none
 pool:
   name:  'myvmsspool'
 
-parameters:
-  - name: param1
-    type: string
-    default: 'value1;value2;value3'
+stages:
+- stage: Build_Stage
+  jobs:
 
-  - name: param2
-    type: string
-    default: 'valueA;valueB'
-
-jobs:
-- job: RunParallelJobs
-  displayName: "Run parallel jobs with different parameters"
-  strategy:
-    matrix:
-      param1:
-        - $(splitString(parameters.param1, ';'))
-      param2:
-        - $(splitString(parameters.param2, ';'))
-  steps:
-  - script: echo "Running tests with param1=$(param1) and param2=$(param2)"
+  - job: Build
+    strategy:
+      matrix:
+        Python35:
+          PYTHON_VERSION: '3.5'
+        Python36:
+          PYTHON_VERSION: '3.6'
+        Python37:
+          PYTHON_VERSION: '3.7'
+      maxParallel: 3
+    steps:
+    - checkout: none
+    - script: echo $(PYTHON_VERSION)
