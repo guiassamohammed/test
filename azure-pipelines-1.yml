@@ -1,18 +1,32 @@
-trigger: 
-- main
+trigger:
+  - main
+
 pool:
   name:  'myvmsspool'
+
+strategy:
+  matrix:
+    param1:
+      - value1
+      - value2
+      - value3
+    param2:
+      - valueA
+      - valueB
+
 jobs:
-- job: Test
-  strategy:
-    maxParallel: 1
-    matrix: 
-      US_IE:
-        Location: US
-        Browser: IE
-      US_Chrome:
-        Location: US
-        Browser: Chrome
-      Europe_Chrome:
-        Location: Europe
-        Browser: Chrome
+- job: RunTests
+  displayName: "Run tests with param1=$(param1) "
+  steps:
+  - script: echo "Running tests with param1=$(param1)"
+
+- job: RunTests
+  displayName: "Run tests with param1=$(param2) "
+  steps:
+  - script: echo "Running tests with param1=$(param2)"
+
+
+- job: RunTests
+  displayName: "Run tests with param1=$(param3) "
+  steps:
+  - script: echo "Running tests with param1=$(param3)"
