@@ -2,20 +2,26 @@ trigger:
   -  main
 
 
-strategy:
-  matrix:
-    param1:
-      - value1
-      - value2
-      - value3
-    param2:
-      - valueA
-      - valueB
 pool:
   name:  'myvmsspool'
 
+parameters:
+  - name: param1
+    type: string
+    default: 'value1;value2;value3'
+
+  - name: param2
+    type: string
+    default: 'valueA;valueB'
+
 jobs:
-- job: RunTests
-  displayName: "Run tests with param1=$(param1) and param2=$(param2)"
+- job: RunParallelJobs
+  displayName: "Run parallel jobs with different parameters"
+  strategy:
+    matrix:
+      param1:
+        - $(splitString(parameters.param1, ';'))
+      param2:
+        - $(splitString(parameters.param2, ';'))
   steps:
   - script: echo "Running tests with param1=$(param1) and param2=$(param2)"
