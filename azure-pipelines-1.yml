@@ -17,5 +17,4 @@ stages:
     steps:
     - checkout: none
     - script: |
-        echo $(PYTHON_VERSION)
         mkdir -p '$(Agent.ToolsDirectory)/$(PYTHON_VERSION)'
