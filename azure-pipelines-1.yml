@@ -1,8 +1,6 @@
 trigger:
-  - main
+  -  master
 
-pool:
-  name:  'myvmsspool'
 
 strategy:
   matrix:
@@ -13,20 +11,11 @@ strategy:
     param2:
       - valueA
       - valueB
+pool:
+  name:  'myvmsspool'
 
 jobs:
 - job: RunTests
-  displayName: "Run tests with param1=$(param1) "
+  displayName: "Run tests with param1=$(param1) and param2=$(param2)"
   steps:
-  - script: echo "Running tests with param1=$(param1)"
-
-- job: RunTests
-  displayName: "Run tests with param1=$(param2) "
-  steps:
-  - script: echo "Running tests with param1=$(param2)"
-
-
-- job: RunTests
-  displayName: "Run tests with param1=$(param3) "
-  steps:
-  - script: echo "Running tests with param1=$(param3)"
+  - script: echo "Running tests with param1=$(param1) and param2=$(param2)"
