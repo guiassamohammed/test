@@ -1,27 +1,18 @@
-
+trigger: 
+- main
 pool:
   name:  'myvmsspool'
 jobs:
-- job: Test3
-  steps:
-  - script:  echo hello , $HOSTNAME
-
-- job: Test4
-  steps: 
-  - script:  echo hello , $HOSTNAME
-
-- job: Test5
-  steps:
-  - script:  echo hello , $HOSTNAME
-
-- job: Test6
-  steps: 
-  - script:  echo hello , $HOSTNAME
-
-- job: Test7
-  steps:
-  - script:  echo hello , $HOSTNAME
-
-- job: Test8
-  steps: 
-  - script:  echo hello , $HOSTNAME
+- job: Test
+  strategy:
+    maxParallel: 2
+    matrix: 
+      US_IE:
+        Location: US
+        Browser: IE
+      US_Chrome:
+        Location: US
+        Browser: Chrome
+      Europe_Chrome:
+        Location: Europe
+        Browser: Chrome
