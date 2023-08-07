@@ -24,8 +24,6 @@ jobs:
   steps:
   - task: PowerShell@2
     inputs:
-      targetType: inline
-      pwsh: true
       script: |
         script/Install-Module.ps1 -Name "Azure Az" -Module "Az"
         script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
