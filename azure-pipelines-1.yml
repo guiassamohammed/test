@@ -19,7 +19,7 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test_${{pbin}}-test
+  - job: test_${{pbin}}_ff
     displayName: 'Build Files in Parallel ${{pbin}}'    
     steps: 
     - task: PowerShell@2
