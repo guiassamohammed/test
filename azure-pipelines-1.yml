@@ -25,6 +25,7 @@ jobs:
     matrix:
       mypbin:
           pbinsParameter: ${{ parameters.pbins }}
+    maxParallel: 3      
       
   steps:
   - task: PowerShell@2
