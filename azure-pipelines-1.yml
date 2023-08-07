@@ -11,13 +11,11 @@ parameters:
     - file1.txt
     - file2.txt 
     - file3.txt 
-  
 
 variables:
 
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
-
 
 jobs:
 
@@ -48,4 +46,3 @@ jobs:
       inputs:
           script: echo "This is the content of the file." > file.txt
       displayName: add content to file.   
-  
