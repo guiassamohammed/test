@@ -1,8 +1,7 @@
 trigger:
-- main
-
+ - main
 pool:
-  name: 'myvmsspool'
+  name:  'myvmsspool'
 
 parameters:
 - name: pbins
@@ -12,37 +11,41 @@ parameters:
     - file1.txt
     - file2.txt 
     - file3.txt 
+  
 
 variables:
+
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
+
 jobs:
+
 - job: test 
   displayName: 'Build Files in Parallel'
   
   steps:
-  - task: PowerShell@2
-    inputs:
-      script: |
-           $(Pipeline.Workspace)/s//script/Install-Module.ps1 -Name "Azure Az" -Module "Az"
-           $(Pipeline.Workspace)/s//script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
-    displayName: Dependencies
-
-  - ${{ each pb in parameters.pbins }}:
+  
+  - ${{ each pbin in parameters.pbins }}: 
     - task: PowerShell@2
       inputs:
-        targetType: filePath
+        targetType: inline
         pwsh: true
-        filePath: $(Pipeline.Workspace)/s//script/Download-Pbins.ps1
-        arguments: >
-          -Destination $(PBIN_CACHE_DIRECTORY)
-          -StorageAccountName "mystorage15689"
-          -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
-          -Pbins $(pb)
-      displayName: Download PBINs $(pb)
+        script: |
+            script/Install-Module.ps1 -Name "Azure Az" -Module "Az"
+            script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
+      displayName: Dependencies
 
-  - task: PowerShell@2
-    inputs:
-      script: echo "This is the content of the file." > file.txt
-    displayName: add content to file.
+    - task: PowerShell@2
+      inputs:
+          targetType: filePath
+          pwsh: true
+          filePath: script/Download-Pbins.ps1
+          arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
+      displayName: Download PBINs
+        
+    - task: PowerShell@2
+      inputs:
+          script: echo "This is the content of the file." > file.txt
+      displayName: add content to file.   
+  
