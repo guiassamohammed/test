@@ -20,7 +20,7 @@ variables:
 
 
 jobs:
-- ${{ each file in variables.files }}:
+
 - job: test 
   displayName: 'Build Files in Parallel'
   steps:
