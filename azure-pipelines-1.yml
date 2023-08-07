@@ -20,11 +20,11 @@ variables:
   value: $(Agent.ToolsDirectory)/PBIN
 
 - name: MyRunNumber
-  value: '1.0.0-CI+$(Build.BuildNumber)'
+  value: 1.0.0-CI+$(Build.BuildNumber)
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test_$(MyRunNumber) 
+  - job: test_${{MyRunNumber}} 
     displayName: 'Build Files in Parallel ${{pbin}}'    
     steps: 
     - task: PowerShell@2
