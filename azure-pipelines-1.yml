@@ -21,12 +21,6 @@ jobs:
 - job: test 
   displayName: 'Build Files in Parallel'
   
-  strategy:
-    matrix:
-      mypbin:
-          pbinsParameter: ${{ parameters.pbins }}
-    maxParallel: 3      
-      
   steps:
   - task: PowerShell@2
     inputs:
@@ -37,17 +31,18 @@ jobs:
         script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
     displayName: Dependencies
 
-  - task: PowerShell@2
-    inputs:
-      targetType: filePath
-      pwsh: true
-      filePath: script/Download-Pbins.ps1
-      arguments: >
-        -Destination $(PBIN_CACHE_DIRECTORY)
-        -StorageAccountName "mystorage15689"
-        -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
-        -Pbins $(pbinsParameter)
-    displayName: Download PBINs
+  - ${{ each pb in parameters.pbins }}:
+    - task: PowerShell@2
+      inputs:
+        targetType: filePath
+        pwsh: true
+        filePath: script/Download-Pbins.ps1
+        arguments: >
+          -Destination $(PBIN_CACHE_DIRECTORY)
+          -StorageAccountName "mystorage15689"
+          -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
+          -Pbins $(pb)
+      displayName: Download PBINs $(pb)
 
   - task: PowerShell@2
     inputs:
