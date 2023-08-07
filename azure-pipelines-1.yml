@@ -13,14 +13,14 @@ parameters:
     - file3
 
 
-  MyRunNumber: '1.0.0-CI+$(Build.BuildNumber)'
 
 variables:
 
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
- MyRunNumber: '1.0.0-CI+$(Build.BuildNumber)'
+- name: MyRunNumber
+  value: '1.0.0-CI+$(Build.BuildNumber)'
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
