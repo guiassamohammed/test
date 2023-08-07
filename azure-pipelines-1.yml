@@ -1,20 +1,52 @@
-name: Azure DevOps Pipelines - Matrix Strategy
-
-trigger: none
+trigger:
+ - main
 pool:
   name:  'myvmsspool'
 
-stages:
-- stage: Build_Stage
-  jobs:
+parameters:
+- name: file
+  displayName: files list
+  type: object
+  default:
+    - file1.txt
+    - file2.txt 
+    - file3.txt 
+  
+jobs:
+- job: test 
+  displayName: 'Build Files in Parallel'
+  steps:
 
-  - job: Build
-    strategy:
-      matrix:
-        Python35:
-          PYTHON_VERSION: '3.5'
-      maxParallel: 3
-    steps:
-    - checkout: none
-    - script: |
-        mkdir -p '$(Agent.ToolsDirectory)/$(PYTHON_VERSION)'
+  - task: PowerShell@2
+    inputs:
+        targetType: filePath
+        pwsh: true
+        script: |
+              $Destination = $(Agent.ToolsDirectory)/FILE
+              $StorageAccountName="mystorage15689 " 
+              $StorageAccountKey= "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
+
+              Import-Module Az.Storage
+              
+
+              if (-Not (Test-Path -Path $Destination -PathType Container)) {
+                New-Item -Path $Destination -ItemType Directory
+              }
+              $context = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
+            
+                if (-Not (Test-Path -Path "$Destination/$file" -PathType Leaf)) {
+                  Write-Host -NoNewline "Downloading $file... "
+                  Get-AzStorageFileContent -ShareName myfile -Path "$file" -Context $context -Destination $Destination
+                  Write-Host "done"
+                else {
+                  Write-Host "Skipping $file (cached)"
+                }
+              }
+
+    displayName: Download file
+
+  - task: PowerShell@2
+    inputs:
+         script: echo "This is the content of the file." > file.txt
+
+  displayName: add content 
