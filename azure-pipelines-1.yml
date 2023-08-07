@@ -6,7 +6,7 @@ pool:
 variables:
 
 - name: file_CACHE_DIRECTORY
-  value: $(Agent.ToolsDirectory)/File
+  value: $(Agent.ToolsDirectory)\File
 
 parameters:
 - name: file
