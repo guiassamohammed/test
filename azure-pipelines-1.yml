@@ -23,7 +23,7 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test-$(Build.BuildId)
+  - job: test_${{pbin}}
     displayName: 'Build Files in Parallel'    
     steps: 
     - task: PowerShell@2
