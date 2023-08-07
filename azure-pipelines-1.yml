@@ -3,6 +3,11 @@ trigger:
 pool:
   name:  'myvmsspool'
 
+variables:
+
+- name: file_CACHE_DIRECTORY
+  value: $(Agent.ToolsDirectory)/File
+
 parameters:
 - name: file
   displayName: files list
@@ -21,7 +26,7 @@ jobs:
     inputs:
         targetType: inline
         script: |
-              $Destination = $(Agent.ToolsDirectory)/FILE
+              $Destination = $(file_CACHE_DIRECTORY)
               $StorageAccountName="mystorage15689 " 
               $StorageAccountKey= "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
 
