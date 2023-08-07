@@ -8,9 +8,9 @@ parameters:
   displayName: PBIN list
   type: object
   default:
-    - file1.txt
-    - file2.txt 
-    - file3.txt 
+    - file1
+    - file2
+    - file3
 
 variables:
 
@@ -19,7 +19,7 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test_${{pbin}}_ff
+  - job: test_${{pbin}}
     displayName: 'Build Files in Parallel ${{pbin}}'    
     steps: 
     - task: PowerShell@2
