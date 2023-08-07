@@ -23,7 +23,8 @@ jobs:
   
   strategy:
     matrix:
-      pbinsParameter: ${{ parameters.pbins }}
+      mypbin:
+          pbinsParameter: ${{ parameters.pbins }}
       
   steps:
   - task: PowerShell@2
