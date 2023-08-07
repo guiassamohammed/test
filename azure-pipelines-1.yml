@@ -16,7 +16,43 @@ jobs:
 - job: test 
   displayName: 'Build Files in Parallel'
   steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: inline
+      pwsh: true
+      script: |
+            $pwsh_cmd = "${env:ProgramFiles}\PowerShell\7\pwsh.exe"
+            try {
+              $null = Get-Command pwsh
+            }
+            catch {
+              Write-Output "Finding latest PowerShell version"
+              $latest_powershell = Invoke-RestMethod -Method Get -Uri https://api.github.com/repos/PowerShell/PowerShell/releases/latest
+              $tag = $latest_powershell.tag_name
+              $download_url = ($latest_powershell.assets | Where-Object {$_.name -Match "^.*win.*64.*\.msi$" }).browser_download_url
 
+              Write-Output "Downloading PowerShell $tag"
+              $out_file = "PowerShell-$tag-win-x64.msi"
+              Invoke-WebRequest -Uri $download_url -OutFile $out_file
+
+              Write-Host -NoNewline "Installing PowerShell ${tag}..."
+              msiexec.exe /package $out_file /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
+              while ($true) {
+                try {
+                  $null = (& "$pwsh_cmd" -Command { $PSVersionTable.PSVersion.ToString() })
+                  break
+                }
+                catch {
+                  Write-Host -NoNewline "."
+                  Start-Sleep -Seconds 1
+                }
+              }
+              Write-Host ""
+            }
+            $pwsh_version = (& "$pwsh_cmd" -Command { $PSVersionTable.PSVersion.ToString() })
+            Write-Output "PowerShell $pwsh_version installed"
+
+       
   - task: PowerShell@2
     inputs:
         targetType: inline
