@@ -1,7 +1,8 @@
 trigger:
- - main
+- main
+
 pool:
-  name:  'myvmsspool'
+  name: 'myvmsspool'
 
 parameters:
 - name: pbins
@@ -11,40 +12,42 @@ parameters:
     - file1.txt
     - file2.txt 
     - file3.txt 
-  
 
 variables:
-
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
-
 jobs:
-
 - job: test 
   displayName: 'Build Files in Parallel'
   
+  strategy:
+    matrix:
+      pbinsParameter: ${{ parameters.pbins }}
+      
   steps:
-  
-  - ${{ each pbin in parameters.pbins }}: 
-    - task: PowerShell@2
-      inputs:
-        targetType: inline
-        pwsh: true
-        script: |
-            script/Install-Module.ps1 -Name "Azure Az" -Module "Az"
-            script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
-      displayName: Dependencies
+  - task: PowerShell@2
+    inputs:
+      targetType: inline
+      pwsh: true
+      script: |
+        script/Install-Module.ps1 -Name "Azure Az" -Module "Az"
+        script/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
+    displayName: Dependencies
 
-    - task: PowerShell@2
-      inputs:
-          targetType: filePath
-          pwsh: true
-          filePath: script/Download-Pbins.ps1
-          arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
-      displayName: Download PBINs
-        
-    - task: PowerShell@2
-      inputs:
-          script: echo "This is the content of the file." > file.txt
-      displayName: add content to file.   
+  - task: PowerShell@2
+    inputs:
+      targetType: filePath
+      pwsh: true
+      filePath: script/Download-Pbins.ps1
+      arguments: >
+        -Destination $(PBIN_CACHE_DIRECTORY)
+        -StorageAccountName "mystorage15689"
+        -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
+        -Pbins $(pbinsParameter)
+    displayName: Download PBINs
+
+  - task: PowerShell@2
+    inputs:
+      script: echo "This is the content of the file." > file.txt
+    displayName: add content to file.
