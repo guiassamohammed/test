@@ -3,54 +3,46 @@ trigger:
 pool:
   name:  'myvmsspool'
 
-variables:
-
-- name: file_CACHE_DIRECTORY
-  value: $(Agent.ToolsDirectory)
-
 parameters:
-- name: file
-  displayName: files list
+- name: pbins
+  displayName: PBIN list
   type: object
   default:
     - file1.txt
     - file2.txt 
     - file3.txt 
   
+
+variables:
+- group: Azure
+
+- name: PBIN_CACHE_DIRECTORY
+  value: $(Agent.ToolsDirectory)/PBIN
+
+
+
 jobs:
 - job: test 
   displayName: 'Build Files in Parallel'
-  steps:
-       
-  - task: PowerShell@2
-    inputs:
-        targetType: inline
-        script: |
-              $Destination = $(file_CACHE_DIRECTORY)
-              $StorageAccountName="mystorage15689 " 
-              $StorageAccountKey= "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ=="
+- ${{ each file in variables.files }}:
+    - task: PowerShell@2
+        inputs:
+          targetType: inline
+          pwsh: true
+          script: |
+            scripts/Install-Module.ps1 -Name "Azure Az" -Module "Az"
+            scripts/Install-Module.ps1 -Name "powershell-yaml" -Module "powershell-yaml"
+    displayName: Dependencies
 
-              Import-Module Az.Storage
-              
-
-              if (-Not (Test-Path -Path $Destination -PathType Container)) {
-                New-Item -Path $Destination -ItemType Directory
-              }
-              $context = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
-            
-                if (-Not (Test-Path -Path "$Destination/$file" -PathType Leaf)) {
-                  Write-Host -NoNewline "Downloading $file... "
-                  Get-AzStorageFileContent -ShareName myfile -Path "$file" -Context $context -Destination $Destination
-                  Write-Host "done"
-                else {
-                  Write-Host "Skipping $file (cached)"
-                }
-              }
-
-    displayName: Download file
-
-  - task: PowerShell@2
-    inputs:
-         script: echo "This is the content of the file." > file.txt
-
-    displayName: Environment
+    - task: PowerShell@2
+        inputs:
+          targetType: filePath
+          pwsh: true
+          filePath: scripts/Download-Pbins.ps1
+          arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
+        displayName: Download PBINs
+        
+    - task: PowerShell@2
+        inputs:
+          script: echo "This is the content of the file." > file.txt
+        displayName: add content to file.   
