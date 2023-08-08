@@ -32,7 +32,7 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test-$(Build.BuildId)
+  - job: mybuild-$(Build.BuildId)
     displayName: 'Build Files in Parallel Job-$(Build.BuildId) '    
     steps: 
     - task: PowerShell@2
