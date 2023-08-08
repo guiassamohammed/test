@@ -55,7 +55,7 @@ stages:
         displayName: copy to the artifact
         inputs:
           SourceFolder: $(PBIN_CACHE_DIRECTORY) 
-          targetFolder: 
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       
           
       - task: PublishBuildArtifacts@1
