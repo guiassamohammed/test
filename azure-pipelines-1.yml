@@ -36,7 +36,6 @@ jobs:
     - task: PowerShell@2
       inputs:
           targetType: filePath
-          pwsh: true
           filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
           arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
       displayName: Download PBINs       
