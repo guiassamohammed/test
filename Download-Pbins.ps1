@@ -21,7 +21,7 @@ $context = New-AzStorageContext -StorageAccountName $StorageAccountName -Storage
 foreach ($pbin in $Pbins) {
   if (-Not (Test-Path -Path "$Destination/$pbin" -PathType Leaf)) {
     Write-Host -NoNewline "Downloading $pbin... "
-    Get-AzStorageFileContent -ShareName shared-pbins -Path "$pbin" -Context $context -Destination $Destination
+    Get-AzStorageFileContent -ShareName myfile  -Path "$pbin" -Context $context -Destination $Destination
     Write-Host "done"
   } else {
     Write-Host "Skipping $pbin (cached)"
