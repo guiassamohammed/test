@@ -31,7 +31,7 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test ${{pbin}}
+  - job: test-${{pbin}}
     displayName: build pipeline ${{pbin}}
     steps: 
     - task: PowerShell@2
