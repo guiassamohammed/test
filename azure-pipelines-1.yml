@@ -12,13 +12,7 @@ parameters:
     - file2.txt
     - file3.txt
   
-- name: name
-  displayName: name list
-  type: object
-  default:
-    - file1.txt
-    - file2.txt
-    - file3.txt
+
 
 variables:
 
@@ -27,7 +21,7 @@ variables:
 
 
 - name: PBIN_LIST
-  value: $('${{ convertToJson(parameters.name) }}' | ConvertFrom-Json)
+  value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
   
 stages:
 - stage: build
