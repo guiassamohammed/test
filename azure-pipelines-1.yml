@@ -8,9 +8,9 @@ parameters:
   displayName: PBIN list
   type: object
   default:
-    - file1
-    - file2
-    - file3
+    - file1.txt
+    - file2.txt
+    - file3.txt
   
 - name: name
   displayName: name list
@@ -33,7 +33,7 @@ stages:
 - stage: build
   jobs:
   - ${{ each pbin in parameters.pbins }}: 
-    - job: 
+    - job:
       displayName: build pipeline ${{pbin}}
       steps: 
       - task: PowerShell@2
