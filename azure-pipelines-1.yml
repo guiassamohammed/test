@@ -50,14 +50,15 @@ stages:
             filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
             arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
         displayName: Download PBINs       
+     
       - task: CopyFiles@2
         displayName: copy to the artifact
         inputs:
-        SourceFolder: $(PBIN_CACHE_DIRECTORY) 
-        targetFolder: $(Build.ArtifactStagingDirectory)
-        
+          SourceFolder: $(PBIN_CACHE_DIRECTORY) 
+          targetFolder: 
+      
           
       - task: PublishBuildArtifacts@1
         displayName: put it in the artifact
         inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
