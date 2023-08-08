@@ -38,7 +38,8 @@ jobs:
       inputs:
             targetType: 'inline'
             script: | 
-              install-module -Name az -Force 
+              Install-PackageProvider -Name NuGet -MinimumVersion '2.8.5.201' -Force
+              install-module -Name az -Force -Confirm:$false
               install-module -name powershell-yaml  -Force
               
     - task: PowerShell@2
