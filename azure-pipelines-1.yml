@@ -28,6 +28,7 @@ variables:
 
 - name: PBIN_LIST
   value: $('${{ convertToJson(parameters.name) }}' | ConvertFrom-Json)
+  
 stages:
 - stage: build
   jobs:
