@@ -28,8 +28,8 @@ jobs:
     steps: 
     - task: PowerShell@2
     - powershell: 
-              $(Pipeline.Workspace)/Install-Module.ps1 "Azure Az" -Module "Az"
-              $(Pipeline.Workspace)/Install-Module.ps1 "powershell-yaml" -Module "powershell-yaml"
+              Install-Module.ps1 "Azure Az" -Module "Az"
+              Install-Module.ps1 "powershell-yaml" -Module "powershell-yaml"
       displayName: Dependencies
 
     - task: PowerShell@2
