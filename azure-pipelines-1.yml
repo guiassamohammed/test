@@ -48,13 +48,14 @@ jobs:
           filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
           arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
       displayName: Download PBINs       
-    - task: PowerShell@2
+    - task: CopyFiles@2
+      displayName: copy to the artifact
       inputs:
-          script: echo "This is the content of the file." > file.txt
-      displayName: add content to file.   
-    
-    - task: PublishPipelineArtifact@1
+       SourceFolder: $(PBIN_CACHE_DIRECTORY) 
+       targetFolder: $(Build.ArtifactStagingDirectory)
+       
+         
+    - task: PublishBuildArtifacts@1
+      displayName: put it in the artifact
       inputs:
-        targetPath: '$(Pipeline.Workspace)'
-        artifact: 'mo'
-        publishLocation: 'pipeline'
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
