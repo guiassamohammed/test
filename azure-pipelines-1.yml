@@ -33,7 +33,7 @@ stages:
 - stage: build
   jobs:
   - ${{ each pbin in parameters.pbins }}: 
-    - job: test_${{pbin}}
+    - job: 
       displayName: build pipeline ${{pbin}}
       steps: 
       - task: PowerShell@2
