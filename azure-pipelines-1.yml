@@ -62,3 +62,9 @@ stages:
         displayName: put it in the artifact
         inputs:
            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+           
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          downloadPath: '$(System.ArtifactsDirectory)'
