@@ -1,7 +1,7 @@
 trigger:
  - main
 pool:
-  name:  'myvmsspool'
+  name: 'myvmsspool'
 
 parameters:
 - name: pbins
@@ -11,17 +11,15 @@ parameters:
     - file1.txt
     - file2.txt
     - file3.txt
-  
 
 variables:
 
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
-
 - name: PBIN_LIST
   value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
-  
+
 stages:
 - stage: build
   jobs:
@@ -42,20 +40,17 @@ stages:
             targetType: filePath
             filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
             arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
-        displayName: Download PBINs       
-     
+        displayName: Download PBINs
       - task: CopyFiles@2
         displayName: copy to the artifact
         inputs:
-          SourceFolder: $(PBIN_CACHE_DIRECTORY) 
+          SourceFolder: $(PBIN_CACHE_DIRECTORY)
           targetFolder: '$(Build.ArtifactStagingDirectory)'
-      
-          
       - task: PublishBuildArtifacts@1
         displayName: put it in the artifact
         inputs:
            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-           
+
       - task: DownloadBuildArtifacts@1
         inputs:
           buildType: 'current'
