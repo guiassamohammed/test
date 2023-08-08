@@ -38,8 +38,9 @@ jobs:
       inputs:
             targetType: 'inline'
             script: | 
-              'install-module -name powershell-yaml  -Force'
-              'install-module -Name az -Force '
+              install-module -Name az -Force 
+              install-module -name powershell-yaml  -Force
+              
     - task: PowerShell@2
       inputs:
           targetType: filePath
