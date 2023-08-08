@@ -8,17 +8,17 @@ parameters:
   displayName: PBIN list
   type: object
   default:
-    - file1.txt
-    - file2.txt
-    - file3.txt
+    - file1
+    - file2
+    - file3
   
 - name: name
   displayName: name list
   type: object
   default:
-    - file1
-    - file2
-    - file3
+    - file1.txt
+    - file2.txt
+    - file3.txt
 
 variables:
 
@@ -27,11 +27,11 @@ variables:
 
 
 - name: PBIN_LIST
-  value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
+  value: $('${{ convertToJson(parameters.name) }}' | ConvertFrom-Json)
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: test-${{Build.BuildId) }}
+  - job: test ${{pbin}}
     displayName: build pipeline ${{pbin}}
     steps: 
     - task: PowerShell@2
