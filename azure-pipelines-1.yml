@@ -20,6 +20,8 @@ variables:
   value: $(Agent.ToolsDirectory)/PBIN
 
 
+- name: PBIN_LIST
+  value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
