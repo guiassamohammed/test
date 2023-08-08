@@ -30,7 +30,8 @@ jobs:
       inputs:
             targetType: 'filePath'
             filePath: '$(System.DefaultWorkingDirectory)/Install-Module.ps1'
-            arguments:  -Name "Azure Az" -Module "Az"
+            arguments:  -Name "Azure Az" -Module "Az", -Name "powershell-yaml" -Module "powershell-yaml"
+            
     - task: PowerShell@2
       inputs:
           targetType: filePath
