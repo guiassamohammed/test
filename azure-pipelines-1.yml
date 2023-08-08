@@ -31,8 +31,8 @@ variables:
 
 jobs:
 - ${{ each pbin in parameters.pbins }}: 
-  - job: ${{ format('mybuild-{0}-{1}', parameters.name[loop.index], Build.BuildId) }}
-    displayName: ${{ format('Build Files in Parallel Job - {0}', parameters.name[loop.index]) }}  
+  - job: test 
+    displayName: build pipeline ${{pbin}}
     steps: 
     - task: PowerShell@2
       inputs:
