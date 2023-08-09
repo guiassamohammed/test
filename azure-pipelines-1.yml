@@ -13,7 +13,6 @@ parameters:
     - file3.txt
   
 variables:
-
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
@@ -40,7 +39,7 @@ stages:
             targetType: filePath
             filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
             arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
-        displayName: Download PBINs       
+        displayName: Download PBINs
      
       - task: CopyFiles@2
         displayName: copy to the artifact
@@ -53,8 +52,6 @@ stages:
         displayName: put it in the artifact
         inputs:
            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-           
-
 
 - stage: publish
   dependsOn: build
