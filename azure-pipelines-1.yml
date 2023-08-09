@@ -70,4 +70,4 @@ stages:
      
        - task: CmdLine@2
          inputs:
-          script: dir $(System.ArtifactsDirectory)
+          script: dir $(System.ArtifactsDirectory)\mo
