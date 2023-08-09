@@ -12,17 +12,14 @@ parameters:
     - file2.txt
     - file3.txt
   
-
-
 variables:
 
 - name: PBIN_CACHE_DIRECTORY
   value: $(Agent.ToolsDirectory)/PBIN
 
-
 - name: PBIN_LIST
   value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
-  
+
 stages:
 - stage: build
   jobs:
@@ -37,7 +34,7 @@ stages:
                 Install-PackageProvider -Name NuGet -MinimumVersion '2.8.5.201' -Force
                 install-module -Name az -Force -Confirm:$false
                 install-module -name powershell-yaml  -Force
-                
+
       - task: PowerShell@2
         inputs:
             targetType: filePath
@@ -57,12 +54,20 @@ stages:
         inputs:
            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
            
-      - task: DownloadBuildArtifacts@1
-        inputs:
+
+
+- stage: publish
+  dependsOn: build
+  jobs:
+   - job: publish_performance_test
+     displayName: Publish 
+     steps:
+       - task: DownloadBuildArtifacts@1
+         inputs:
           buildType: 'current'
           downloadType: 'single'
-          downloadPath: '$(System.ArtifactsDirectory)'
+          downloadPath: '$(System.ArtifactsDirectory)/mo'
      
-      - task: CmdLine@2
-        inputs:
-          script: dir $(System.ArtifactsDirectory)
+       - task: CmdLine@2
+         inputs:
+          script: dir $(System.ArtifactsDirectory)/mo
