@@ -9,8 +9,7 @@ parameters:
   type: object
   default:
     - file1.txt
-    - file2.txt
-    - file3.txt
+   
   
 variables:
 - name: PBIN_CACHE_DIRECTORY
