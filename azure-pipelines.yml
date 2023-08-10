@@ -23,7 +23,7 @@ stages:
 - stage: build
   jobs:
   - ${{ each pbin in parameters.pbins }}: 
-    - job:  $(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+    - job: 
       displayName: build pipeline ${{pbin}}
       steps: 
       - task: PowerShell@2
