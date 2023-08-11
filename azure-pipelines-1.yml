@@ -1,0 +1,72 @@
+### d1 branch 
+trigger: 
+  - main
+
+pool:
+  name:  'myvmsspool'
+
+parameters:
+- name: pbins
+  displayName: PBIN list
+  type: object
+  default:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+  
+variables:
+- name: PBIN_CACHE_DIRECTORY
+  value: $(Agent.ToolsDirectory)/PBIN
+
+- name: PBIN_LIST
+  value: $('${{ convertToJson(parameters.pbins) }}' | ConvertFrom-Json)
+
+stages:
+- stage: build
+  jobs:
+  - ${{ each pbin in parameters.pbins }}: 
+    - job:
+      displayName: build pipeline ${{pbin}}
+      steps: 
+      - task: PowerShell@2
+        inputs:
+              targetType: 'inline'
+              script: | 
+                Install-PackageProvider -Name NuGet -MinimumVersion '2.8.5.201' -Force
+                install-module -Name az -Force -Confirm:$false
+                install-module -name powershell-yaml  -Force
+
+      - task: PowerShell@2
+        inputs:
+            targetType: filePath
+            filePath: '$(System.DefaultWorkingDirectory)/Download-Pbins.ps1'
+            arguments: -Destination $(PBIN_CACHE_DIRECTORY) -StorageAccountName "mystorage15689" -StorageAccountKey "AbF/p5UmVVU4CwV6zxuVuO/fsMuWdPwkGdwsSzLv6Pkr+RkAIABKmLMXyO5yr84ftClD9XcH7kBD+AStI3x+zQ==" -Pbins $(PBIN_LIST)
+        displayName: Download PBINs
+     
+      - task: CopyFiles@2
+        displayName: copy to the artifact
+        inputs:
+          SourceFolder: $(PBIN_CACHE_DIRECTORY) 
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+          
+      - task: PublishBuildArtifacts@1
+        displayName: put it in the artifact
+        inputs:
+           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+
+- stage: publish
+  dependsOn: build
+  jobs:
+   - job: publish_performance_test
+     displayName: Publish 
+     steps:
+       - task: DownloadBuildArtifacts@1
+         inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          downloadPath: '$(System.ArtifactsDirectory)\mo'
+     
+       - task: CmdLine@2
+         inputs:
+          script: dir $(System.ArtifactsDirectory)\mo\drop
