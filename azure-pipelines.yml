@@ -1,7 +1,7 @@
 trigger: none
 
 pool:
-  name:  'myvmsspool'
+  name:  'vmssagent'
 
 parameters:
 - name: pbins
